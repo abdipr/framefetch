@@ -281,7 +281,7 @@ const LyricsWidget = ({
           <div ref={containerRef} className="truncate">
             {hasText ? (
               <p className="text-zinc-900 dark:text-white text-[2.8rem] font-bold tracking-tight">
-                {selectedText[0]}
+                {lyrics[displayLines[0]]}
               </p>
             ) : (
               <p className="text-zinc-400/50 dark:text-white/20 text-2xl font-bold">

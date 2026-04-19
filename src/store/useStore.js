@@ -26,6 +26,7 @@ const useStore = create(
       textAlign: DEFAULTS.textAlign,
       progress: 0.3,
       isPlaying: true,
+      isCardOnly: false,
 
       exportQuality: 2, // 1=SD, 2=HD, 3=FHD
       exportFormat: "png",
@@ -77,6 +78,14 @@ const useStore = create(
       setXStats: (stats) => set((state) => ({ xStats: { ...state.xStats, ...stats } })),
       setXProfile: (profile) => set((state) => ({ xProfile: { ...state.xProfile, ...profile } })),
 
+      setIsCardOnly: (isCardOnly) => {
+        if (isCardOnly) {
+          set({ isCardOnly, exportFormat: "png" });
+        } else {
+          set({ isCardOnly });
+        }
+      },
+
       setMode: (mode) => set({ mode }),
 
       setPreset: (preset) => set({ preset }),
@@ -111,10 +120,26 @@ const useStore = create(
         }),
 
       syncFromUrl: async () => {
+        const path = window.location.pathname.slice(1);
         const params = new URLSearchParams(window.location.search);
         
-        // Basic settings
-        const mode = params.get("type");
+        // Define all valid non-landing routes
+        const validRoutes = ["music", "x", "tools", "about", "terms", "privacy", "editor"];
+        
+        // Priority 1: Path-based routing
+        if (validRoutes.includes(path)) {
+          set({ route: path });
+        } 
+        // Priority 2: Query-based legacy routing
+        else if (params.get("type")) {
+          set({ route: "music" });
+        }
+        // Priority 3: Fallback to landing
+        else {
+          set({ route: "landing" });
+        }
+
+        // --- Sync shared editor settings ---
         const preset = params.get("preset");
         const format = params.get("format");
         const scale = params.get("scale");
@@ -122,67 +147,70 @@ const useStore = create(
         const progress = params.get("progress");
         const playing = params.get("playing");
         
-        if (mode) set({ route: "music", mode });
-        if (window.location.pathname.includes("/x")) set({ route: "x" });
-        if (window.location.pathname.includes("/music")) set({ route: "music" });
-        if (window.location.pathname.includes("/tools")) set({ route: "tools" });
         if (preset) set({ preset });
         if (format) set({ format });
         if (scale) set({ cardScale: parseFloat(scale) });
         if (align) set({ textAlign: align });
         if (progress) set({ progress: parseFloat(progress) });
         if (playing) set({ isPlaying: playing === "1" });
+        if (params.get("cardOnly")) set({ isCardOnly: params.get("cardOnly") === "1" });
 
-        // Selected lines
-        const lines = params.get("lines");
-        if (lines) {
-          set({ selectedLines: lines.split(",").map(Number).sort((a, b) => a - b) });
+        // --- Selective Syncing based on Route ---
+        const currentRoute = get().route;
+
+        if (currentRoute === "music" || currentRoute === "editor") {
+          const mode = params.get("type");
+          if (mode) set({ mode });
+
+          const lines = params.get("lines");
+          if (lines) {
+            set({ selectedLines: lines.split(",").map(Number).sort((a, b) => a - b) });
+          }
+
+          const id = params.get("id");
+          if (id) {
+            try {
+              const trackData = await fetchTrackById(id);
+              if (trackData) {
+                set({ track: trackData });
+                if (trackData.coverUrl) {
+                  const b64 = await getBase64Image(trackData.coverUrl);
+                  set({ coverBase64: b64 });
+                }
+                const lyricsText = await fetchLyricsAPI(trackData.title, trackData.artist);
+                if (lyricsText) {
+                  const linesArr = lyricsText.split("\n").filter((l) => l.trim() !== "");
+                  set({ lyrics: linesArr });
+                }
+              }
+            } catch (err) {
+              console.error("Failed to sync track from URL", err);
+            }
+          }
         }
 
-        // Track recovery
-        const id = params.get("id");
-        if (id) {
-          try {
-            const trackData = await fetchTrackById(id);
-            if (trackData) {
-              set({ track: trackData });
-              if (trackData.coverUrl) {
-                const b64 = await getBase64Image(trackData.coverUrl);
-                set({ coverBase64: b64 });
-              }
-              
-              // Refetch lyrics if in lyrics mode
-              const lyricsText = await fetchLyricsAPI(trackData.title, trackData.artist);
-              if (lyricsText) {
-                const linesArr = lyricsText.split("\n").filter((l) => l.trim() !== "");
-                set({ lyrics: linesArr });
-              }
-            }
-          } catch (err) {
-            console.error("Failed to sync track from URL", err);
-          }
+        if (currentRoute === "x") {
+          const xtype = params.get("xtype");
+          const xtheme = params.get("xtheme");
+          if (xtype) set({ xType: xtype });
+          if (xtheme) set({ xTheme: xtheme });
         }
       },
 
       syncToUrl: () => {
         const state = get();
-        let path = "/";
-        if (state.route === "music" || state.route === "editor") path = "/music";
-        if (state.route === "x") path = "/x";
-        if (state.route === "tools") path = "/tools";
+        const route = state.route;
 
-        if (state.route === "landing") {
-          window.history.replaceState(null, "", "/");
-          return;
+        // 1. Determine base path
+        let path = "/";
+        if (route !== "landing") {
+          path = `/${route}`;
         }
 
+        // 2. Determine search params (only for editors)
         const params = new URLSearchParams();
-        
-        if (state.route === "x") {
-          params.set("xtype", state.xType);
-          params.set("xtheme", state.xTheme);
-          // (Can add more X params here if needed)
-        } else {
+
+        if (route === "music" || route === "editor") {
           params.set("type", state.mode);
           params.set("preset", state.preset);
           params.set("format", state.format);
@@ -190,6 +218,7 @@ const useStore = create(
           params.set("align", state.textAlign);
           params.set("progress", state.progress.toFixed(2));
           params.set("playing", state.isPlaying ? "1" : "0");
+          params.set("cardOnly", state.isCardOnly ? "1" : "0");
           
           if (state.track?.id) {
             params.set("id", state.track.id.toString());
@@ -198,6 +227,9 @@ const useStore = create(
           if (state.selectedLines.length > 0) {
             params.set("lines", state.selectedLines.join(","));
           }
+        } else if (route === "x") {
+          params.set("xtype", state.xType);
+          params.set("xtheme", state.xTheme);
         }
 
         const search = params.toString() ? `?${params.toString()}` : "";

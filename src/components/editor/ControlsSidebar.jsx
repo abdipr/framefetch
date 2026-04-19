@@ -34,6 +34,8 @@ const ControlsSidebar = () => {
     setCustomization,
     resetToDefault,
     coverBase64,
+    isCardOnly,
+    setIsCardOnly,
   } = useStore();
 
   const presets = [
@@ -225,13 +227,13 @@ const ControlsSidebar = () => {
 
               {/* Card Size & Alignment */}
               <div className="flex flex-col gap-6 bg-white dark:bg-zinc-900/50 p-5 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                <div className="flex flex-col gap-3">
+                <div className={`flex flex-col gap-3 ${isCardOnly ? 'opacity-40 pointer-events-none' : ''}`}>
                   <div className="flex justify-between items-center px-1">
                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">
                       Frame Scale
                     </label>
                     <span className="text-xs font-black text-zinc-400">
-                      {Math.round(cardScale * 100)}%
+                      {isCardOnly ? "100%" : `${Math.round(cardScale * 100)}%`}
                     </span>
                   </div>
                   <div className="flex items-center gap-4 h-10 px-1">
@@ -239,7 +241,8 @@ const ControlsSidebar = () => {
                       min={0.5}
                       max={1.5}
                       step={0.1}
-                      value={[cardScale]}
+                      disabled={isCardOnly}
+                      value={[isCardOnly ? 1 : cardScale]}
                       onValueChange={(val) => {
                         if (val && val.length > 0 && !isNaN(val[0])) {
                           setCustomization({ cardScale: val[0] });
@@ -248,6 +251,24 @@ const ControlsSidebar = () => {
                       className="flex-1"
                     />
                   </div>
+                </div>
+
+                {/* Card Only Mode */}
+                <div className="flex items-center justify-between px-1 pt-2">
+                  <div className="flex flex-col gap-0.5">
+                    <label className="text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-widest">
+                      Card Only Mode
+                    </label>
+                    <p className="text-[9px] text-zinc-500 font-medium">
+                      Transparent background, perfect for edits.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsCardOnly(!isCardOnly)}
+                    className={`w-10 h-6 rounded-full transition-all duration-300 relative ${isCardOnly ? 'bg-indigo-500' : 'bg-zinc-200 dark:bg-zinc-800'}`}
+                  >
+                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all duration-300 ${isCardOnly ? 'left-5 shadow-sm' : 'left-1'}`} />
+                  </button>
                 </div>
 
                 {mode === "lyrics" && (
@@ -329,7 +350,7 @@ const ControlsSidebar = () => {
               </div>
 
               {/* Aspect Ratio */}
-              <div className="flex flex-col gap-4">
+              <div className={`flex flex-col gap-4 ${isCardOnly ? 'opacity-40 pointer-events-none' : ''}`}>
                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] px-1">
                   Aspect Ratio
                 </label>
@@ -337,8 +358,9 @@ const ControlsSidebar = () => {
                   {["1:1", "3:4", "9:16"].map((f) => (
                     <button
                       key={f}
+                      disabled={isCardOnly}
                       onClick={() => setFormat(f)}
-                      className={`h-16 rounded-2xl border text-[11px] font-black flex flex-col items-center justify-center gap-2 transition-all duration-300 ${format === f ? "border-zinc-900 bg-white ring-4 ring-zinc-900/5 dark:border-white dark:bg-zinc-900 dark:ring-white/5" : "border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-600"}`}
+                      className={`h-16 rounded-2xl border text-[11px] font-black flex flex-col items-center justify-center gap-2 transition-all duration-300 ${(!isCardOnly && format === f) ? "border-zinc-900 bg-white ring-4 ring-zinc-900/5 dark:border-white dark:bg-zinc-900 dark:ring-white/5" : "border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-600"}`}
                     >
                       <div
                         className={`border-2 border-current rounded-sm ${f === "1:1" ? "w-4 h-4" : f === "3:4" ? "w-3 h-4" : "w-2.5 h-4"}`}
@@ -433,7 +455,8 @@ const ControlsSidebar = () => {
                       </TabsTrigger>
                       <TabsTrigger
                         value="jpeg"
-                        className="text-[10px] font-black rounded-lg"
+                        disabled={isCardOnly}
+                        className={`text-[10px] font-black rounded-lg ${isCardOnly ? 'opacity-30 cursor-not-allowed' : ''}`}
                       >
                         JPG
                       </TabsTrigger>

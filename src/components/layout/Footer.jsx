@@ -1,6 +1,5 @@
 import useStore from "@/store/useStore";
-import { ExternalLink } from "lucide-react";
-import { FaGithub, FaTwitter, FaInstagram } from "react-icons/fa";
+import { FaGithub, FaXTwitter, FaInstagram } from "react-icons/fa6";
 
 const Footer = () => {
   const setRoute = useStore((state) => state.setRoute);
@@ -14,7 +13,9 @@ const Footer = () => {
             onClick={() => setRoute("landing")}
           >
             <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-white flex items-center justify-center">
-              <span className="text-white dark:text-black font-black text-xs italic">F</span>
+              <span className="text-white dark:text-black font-black text-xs italic">
+                F
+              </span>
             </div>
             <span className="font-heading text-2xl tracking-tighter text-zinc-900 dark:text-white">
               FrameFetch
@@ -25,9 +26,27 @@ const Footer = () => {
             sharing. Designed with precision, created just for fun.
           </p>
           <div className="flex items-center gap-4 text-zinc-400">
-            <FaGithub className="w-5 h-5 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" />
-            <FaTwitter className="w-5 h-5 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" />
-            <FaInstagram className="w-5 h-5 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" />
+            <a
+              href="https://github.com/abdipr/framefetch"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaGithub className="w-5 h-5 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" />
+            </a>
+            <a
+              href="https://x.com/abdiprr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaXTwitter className="w-5 h-5 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" />
+            </a>
+            <a
+              href="https://instagram.com/abdiprr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram className="w-5 h-5 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" />
+            </a>
           </div>
         </div>
 
@@ -63,11 +82,12 @@ const Footer = () => {
           </h4>
           <div className="p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-3">
             <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-normal font-medium">
-              <strong>Personal Use Only:</strong> FrameFetch is for personal use and not affiliated with Apple or Spotify.
+              <strong>Personal Use Only:</strong> FrameFetch is for personal use
+              and not affiliated with Apple or Spotify.
             </p>
-            <a 
-              href="https://github.com" 
-              target="_blank" 
+            <a
+              href="https://github.com/abdipr/framefetch"
+              target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-[11px] font-black text-zinc-900 dark:text-white uppercase tracking-widest hover:opacity-70 transition-opacity"
             >

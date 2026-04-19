@@ -125,15 +125,21 @@ const LandingPage = () => {
           </div>
 
           <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] flex items-center justify-center scale-75 sm:scale-90 lg:scale-100 mt-12 lg:mt-0">
-            <div className="preview-card absolute -left-4 lg:-left-6 top-0 w-[180px] sm:w-[220px] h-[320px] sm:h-[380px] bg-zinc-100 dark:bg-zinc-900 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl -rotate-6 z-10 overflow-hidden">
+            <button 
+              onClick={() => setRoute("music")}
+              className="preview-card absolute -left-4 lg:-left-6 top-0 w-[180px] sm:w-[220px] h-[320px] sm:h-[380px] bg-zinc-100 dark:bg-zinc-900 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl -rotate-6 z-10 overflow-hidden hover:scale-105 transition-all active:scale-95"
+            >
               <div className="absolute inset-0 bg-linear-to-b from-indigo-500/5 to-transparent" />
               <div className="absolute bottom-10 left-6 right-6 space-y-4">
                 <div className="w-10 h-10 rounded-xl bg-zinc-200 dark:bg-zinc-800" />
                 <div className="h-3 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full" />
                 <div className="h-3 w-3/4 bg-zinc-200 dark:bg-zinc-800 rounded-full" />
               </div>
-            </div>
-            <div className="preview-card absolute right-0 bottom-0 w-[300px] sm:w-[380px] h-[220px] sm:h-[280px] bg-white dark:bg-zinc-800 rounded-[2.5rem] sm:rounded-[3rem] border border-zinc-200 dark:border-zinc-700 shadow-2xl rotate-3 z-30 p-6 sm:p-8 flex flex-col justify-between">
+            </button>
+            <button 
+              onClick={() => setRoute("music")}
+              className="preview-card absolute right-0 bottom-0 w-[300px] sm:w-[380px] h-[220px] sm:h-[280px] bg-white dark:bg-zinc-800 rounded-[2.5rem] sm:rounded-[3rem] border border-zinc-200 dark:border-zinc-700 shadow-2xl rotate-3 z-30 p-6 sm:p-8 flex flex-col justify-between hover:scale-105 transition-all active:scale-95 text-left"
+            >
               <div className="flex gap-4 items-center">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-zinc-100 dark:bg-zinc-700 shadow-inner" />
                 <div className="space-y-1.5 flex-1">
@@ -141,7 +147,7 @@ const LandingPage = () => {
                   <div className="h-3 w-1/3 bg-zinc-100 dark:bg-zinc-700 rounded-full" />
                 </div>
               </div>
-              <div className="space-y-2.5">
+              <div className="space-y-2.5 w-full">
                 <div className="h-1.5 w-full bg-zinc-100 dark:bg-zinc-700 rounded-full" />
                 <div className="flex justify-between text-[9px] font-black opacity-20 tracking-tighter">
                   <span>0:42</span>
@@ -153,7 +159,7 @@ const LandingPage = () => {
                 <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-current" />
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-current" />
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </section>

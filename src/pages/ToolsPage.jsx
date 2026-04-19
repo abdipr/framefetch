@@ -2,9 +2,11 @@ import { Music, MessageSquare, ArrowRight } from "lucide-react";
 import useStore from "@/store/useStore";
 
 const ToolCard = ({ title, description, icon: Icon, href, color }) => {
+  const { setRoute } = useStore();
+  
   return (
     <button
-      onClick={() => (window.location.hash = href)}
+      onClick={() => setRoute(href)}
       className="group relative flex flex-col p-8 rounded-[2.5rem] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 text-left w-full h-full overflow-hidden"
     >
       <div
@@ -46,14 +48,14 @@ const ToolsPage = () => {
           title="Music Studio"
           description="Create stunning, shareable frames for your favorite song lyrics. Perfect for stories and posts."
           icon={Music}
-          href="/music"
+          href="music"
           color="bg-green-500"
         />
         <ToolCard
           title="X (Twitter) Mockup"
           description="High-fidelity replicas of Tweets and Profiles for creators, jokes, and storytelling."
           icon={MessageSquare}
-          href="/x"
+          href="x"
           color="bg-[#1d9bf0]"
         />
       </div>

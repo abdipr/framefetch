@@ -1,18 +1,18 @@
 import { useEffect, useRef } from "react";
 
-const BackgroundWrapper = ({ children, preset, coverImage, cardScale }) => {
+const BackgroundWrapper = ({ children, preset, coverImage, cardScale, isCardOnly }) => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
     if (wrapperRef.current && window.gsap) {
       window.gsap.to(wrapperRef.current, {
-        scale: cardScale,
+        scale: isCardOnly ? 1 : cardScale,
         duration: 0.4,
         ease: "power3.out",
         overwrite: "auto",
       });
     }
-  }, [cardScale]);
+  }, [cardScale, isCardOnly]);
 
   const getBgStyles = () => {
     const isApplePreset = preset.startsWith("apple");
@@ -56,23 +56,27 @@ const BackgroundWrapper = ({ children, preset, coverImage, cardScale }) => {
   const styles = getBgStyles();
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center overflow-hidden w-full h-full">
-      {/* Background fill */}
-      <div
-        className="absolute inset-[-20%] bg-cover bg-center"
-        style={{
-          backgroundImage: styles.bg,
-          filter: styles.blur,
-          transform: `${styles.translate} scale(${styles.scale})`,
-        }}
-      />
-      {/* Overlay */}
-      <div className={`absolute inset-0 ${styles.overlay}`} />
+    <div className={`${isCardOnly ? 'relative inline-flex w-max h-fit max-w-none px-12 py-12' : 'absolute inset-0 w-full h-full flex items-center justify-center'} overflow-hidden`}>
+      {!isCardOnly && (
+        <>
+          {/* Background fill */}
+          <div
+            className="absolute inset-[-20%] bg-cover bg-center"
+            style={{
+              backgroundImage: styles.bg,
+              filter: styles.blur,
+              transform: `${styles.translate} scale(${styles.scale})`,
+            }}
+          />
+          {/* Overlay */}
+          <div className={`absolute inset-0 ${styles.overlay}`} />
+        </>
+      )}
 
       {/* Content wrapper with dynamic scaling */}
       <div
         ref={wrapperRef}
-        className="relative z-10 flex flex-col items-center justify-center w-full px-8 will-change-transform"
+        className={`relative z-10 flex flex-col items-center justify-center ${isCardOnly ? 'p-0' : 'w-full px-8'} will-change-transform`}
       >
         {children}
       </div>

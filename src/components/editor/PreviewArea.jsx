@@ -22,6 +22,7 @@ const PreviewArea = () => {
     textAlign,
     progress,
     isPlaying,
+    isCardOnly,
   } = useStore();
 
   const containerRef = useRef(null);
@@ -29,38 +30,50 @@ const PreviewArea = () => {
   const animRef = useRef(null);
   const [scale, setScale] = useState(1);
   const [exporting, setExporting] = useState(false);
+  const [targetSize, setTargetSize] = useState({ width: 1080, height: 1080 });
 
-  // Responsive scaling based on container size
+  // 1. Responsive scaling: Fits the 'canvas' into the 'PreviewArea'
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       if (!entries[0]) return;
       const { width: containerW, height: containerH } = entries[0].contentRect;
       const padding = window.innerWidth < 1024 ? 32 : 64;
-      const targetW = FORMAT_DIMENSIONS[format].width;
-      const targetH = FORMAT_DIMENSIONS[format].height;
 
       const newScale = Math.min(
-        (containerW - padding) / targetW,
-        (containerH - padding) / targetH,
+        (containerW - padding) / targetSize.width,
+        (containerH - padding) / targetSize.height,
       );
 
       setScale(newScale);
-
-      // Smoothly animate the card size change if GSAP is available
-      if (cardRef.current && window.gsap) {
-        window.gsap.to(cardRef.current, {
-          width: targetW,
-          height: targetH,
-          duration: 0.8,
-          ease: "elastic.out(1, 0.8)",
-          overwrite: true,
-        });
-      }
     });
 
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, [format]);
+  }, [targetSize, format, isCardOnly]);
+
+  // 2. Content measuring: Gets the natural size of the card
+  useEffect(() => {
+    if (!isCardOnly) {
+      setTargetSize({
+        width: FORMAT_DIMENSIONS[format].width,
+        height: FORMAT_DIMENSIONS[format].height,
+      });
+      return;
+    }
+
+    // Measure the actual card content
+    const observer = new ResizeObserver(() => {
+      if (cardRef.current) {
+        setTargetSize({
+          width: cardRef.current.scrollWidth,
+          height: cardRef.current.scrollHeight,
+        });
+      }
+    });
+
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, [isCardOnly, format, mode, preset, selectedLines, track]);
 
   // GSAP entrance animation on track/mode change
   useEffect(() => {
@@ -82,11 +95,17 @@ const PreviewArea = () => {
     setExporting(true);
     try {
       const el = cardRef.current;
+
+      // Use the measured targetSize for the export to ensure it matches the preview's 'fit'
+      const actualWidth = targetSize.width;
+      const actualHeight = targetSize.height;
+
       const options = {
         quality: 1,
         pixelRatio: exportQuality,
-        width: FORMAT_DIMENSIONS[format].width,
-        height: FORMAT_DIMENSIONS[format].height,
+        width: actualWidth,
+        height: actualHeight,
+        backgroundColor: null,
         style: {
           transform: "scale(1)",
           transformOrigin: "top left",
@@ -111,8 +130,8 @@ const PreviewArea = () => {
     }
   };
 
-  const targetW = FORMAT_DIMENSIONS[format].width;
-  const targetH = FORMAT_DIMENSIONS[format].height;
+  const targetW = targetSize.width;
+  const targetH = targetSize.height;
 
   return (
     <div className="w-full h-full flex flex-col bg-zinc-50 dark:bg-[#000000] relative overflow-hidden group">
@@ -155,16 +174,19 @@ const PreviewArea = () => {
           <div
             ref={animRef}
             className="relative will-change-transform flex items-center justify-center"
-            style={{ width: targetW * scale, height: targetH * scale }}
+            style={{
+              width: targetW * scale,
+              height: targetH * scale,
+            }}
           >
             <div
               ref={cardRef}
-              className="absolute top-0 left-0 shadow-[0_0_50px_rgba(0,0,0,0.15)] overflow-hidden"
+              className={`${isCardOnly ? "relative w-max h-fit overflow-visible" : "absolute top-0 left-0 w-full h-full overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.15)]"}`}
               style={{
-                width: targetW,
-                height: targetH,
+                width: isCardOnly ? "max-content" : targetW,
+                height: isCardOnly ? "auto" : targetH,
                 transform: `scale(${scale})`,
-                transformOrigin: "top left",
+                transformOrigin: isCardOnly ? "center center" : "top left",
               }}
             >
               <BackgroundWrapper
@@ -172,6 +194,7 @@ const PreviewArea = () => {
                 preset={preset}
                 coverImage={coverBase64}
                 cardScale={cardScale}
+                isCardOnly={isCardOnly}
               >
                 {mode === "lyrics" ? (
                   <LyricsWidget
