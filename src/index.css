@@ -1,0 +1,345 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import url("https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap");
+
+@font-face {
+  font-family: "MySanFrancisco";
+  src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/refs/heads/master/SF-Pro-Text-Bold.otf")
+    format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "MySanFrancisco";
+  src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/refs/heads/master/SF-Pro-Text-Regular.otf")
+    format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "MySanFrancisco";
+  src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/refs/heads/master/SF-Pro-Text-Medium.otf")
+    format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "MySanFrancisco";
+  src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/refs/heads/master/SF-Pro-Text-Thin.otf")
+    format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "MySanFrancisco";
+  src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/refs/heads/master/SF-Pro-Text-Light.otf")
+    format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Spotify Mix";
+  src:
+    url("/fonts/SpotifyMix/SpotifyMix-Regular.woff2") format("woff2"),
+    url("/fonts/SpotifyMix/SpotifyMix-Regular.woff") format("woff"),
+    url("/fonts/SpotifyMix/SpotifyMix-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Spotify Mix";
+  src:
+    url("/fonts/SpotifyMix/SpotifyMix-Bold.woff2") format("woff2"),
+    url("/fonts/SpotifyMix/SpotifyMix-Bold.woff") format("woff"),
+    url("/fonts/SpotifyMix/SpotifyMix-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Spotify Mix";
+  src:
+    url("/fonts/SpotifyMix/SpotifyMix-Medium.woff2") format("woff2"),
+    url("/fonts/SpotifyMix/SpotifyMix-Medium.woff") format("woff"),
+    url("/fonts/SpotifyMix/SpotifyMix-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chirp";
+  src:
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Regular.woff")
+      format("woff"),
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Regular.otf")
+      format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chirp";
+  src:
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Bold.woff")
+      format("woff"),
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Bold.otf")
+      format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chirp";
+  src:
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Medium.woff")
+      format("woff"),
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Medium.otf")
+      format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chirp";
+  src:
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Heavy.woff")
+      format("woff"),
+    url("https://raw.githubusercontent.com/mojolo/Chirp-Font-X-Twitter/main/Chirp%20Heavy.otf")
+      format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-apple:
+    "MySanFrancisco", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-spotify:
+    "Spotify Mix", "Circular", "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@layer utilities {
+  /* Custom Premium Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--zinc-200);
+    border-radius: 20px;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--zinc-800);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--zinc-400);
+  }
+
+  /* Global Selections */
+  ::selection {
+    background: rgba(0, 0, 0, 0.1);
+    color: inherit;
+  }
+  .dark ::selection {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Smooth Focus Rings */
+  :focus-visible {
+    outline: 2px solid var(--zinc-400);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .rounded-full\! {
+    border-radius: 9999px !important;
+  }
+}
+
+@layer utilities {
+  /* Custom range slider */
+  input[type="range"] {
+    -webkit-appearance: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: currentColor;
+    cursor: pointer;
+    margin-top: -6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 2px;
+  }
+}
+
+@theme inline {
+  --font-heading: "Tilt Warp", sans-serif;
+  --font-sans: "Geist Variable", sans-serif;
+  --font-apple:
+    "MySanFrancisco", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-spotify:
+    "Spotify Mix", "Circular", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-x: "Chirp", sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
