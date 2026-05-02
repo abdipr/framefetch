@@ -256,10 +256,10 @@ export default function VideoExportModal({
                 <Cpu className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="text-[10px] font-black text-blue-700 dark:text-blue-400 uppercase tracking-wider">
-                    Client-Side Rendering
+                    Native Browser Encoding
                   </p>
                   <p className="text-[10px] text-blue-600 dark:text-blue-300 font-medium leading-relaxed">
-                    Video di-render langsung di browser menggunakan FFmpeg WASM.
+                    Video di-render langsung di browser menggunakan WebCodecs API.
                     Tidak ada upload. Semua data tetap di device kamu.
                   </p>
                 </div>
@@ -351,7 +351,7 @@ export default function VideoExportModal({
                 </Button>
               )}
               <p className="text-[9px] text-zinc-400 text-center font-medium">
-                FFmpeg WASM · H.264 · No upload required
+                WebCodecs API · H.264 · No upload required
               </p>
             </div>
           </div>
